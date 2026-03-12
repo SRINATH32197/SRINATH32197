@@ -1,16 +1,28 @@
- name: gitartwork from a contribution graph
- on: 
-   push:
- jobs:
-   build:
-     name: Make gitartwork SVG
-     runs-on: ubuntu-latest
-     steps:
-       - uses: actions/checkout@v3
-       - uses: jasineri/gitartwork@v1
-         with:
-            # Use this username's contribution graph  
-            user_name: SRINATH32197
-            # Text on contribution graph 
-            text: SRINATH32197
-       - uses: jasineri/simple-push-action@v1
+name: gitartwork from a contribution graph
+
+on: 
+  push:
+  schedule:
+    - cron: "0 0 * * 0"
+
+jobs:
+  build:
+    name: Make gitartwork SVG
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: jasineri/gitartwork@v1
+        with:
+          # Use this username's contribution graph  
+          user_name: SRINATH32197
+          # Text on contribution graph 
+          text: SRINATH32197
+          
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'Update gitartwork'
+          file_pattern: gitartwork.svg
+          skip_fetch: true
